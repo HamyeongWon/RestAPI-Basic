@@ -19,11 +19,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController // @Controller + @ResponseBody
 public class ProductController {
 	@Resource
-	private ProductMapper productMapper;
+	private ProductMapper mapper;
 	@GetMapping("/products")
 	public List getAllProductList() {
 		System.out.println("Request Method : GET");
-		return productMapper.getAllProductList();
+		return mapper.getAllProductList();
 	}
 	/*
 	 *  @PathVariable : url 정보를 변수로 할당받기 위한 어노테이션 
@@ -32,7 +32,7 @@ public class ProductController {
 	@GetMapping("/products/{id}")	
 	public ResponseEntity findProductById(@PathVariable("id") String id) {
 		System.out.println("Request Method : GET");
-		ProductVO product=productMapper.findProductById(id);		
+		ProductVO product=mapper.findProductById(id);		
 		if (product == null) {
 			return new ResponseEntity("상품이 존재하지 않습니다", HttpStatus.NOT_FOUND);
 		}		
@@ -42,13 +42,13 @@ public class ProductController {
 	@PostMapping(value = "/products")
 	public ResponseEntity registerProduct( ProductVO productVO) {
 		System.out.println("Request Method : POST");
-		productMapper.registerProduct(productVO);	
+		mapper.registerProduct(productVO);	
 		return new ResponseEntity(productVO.getId()+" "+productVO.getName()+" 상품등록완료", HttpStatus.OK);
 	}
 	@DeleteMapping("/products/{id}")
 	public ResponseEntity deleteProduct(@PathVariable String id) {
 		System.out.println("Request Method : DELETE");
-		if (productMapper.deleteProduct(id)==0) {
+		if (mapper.deleteProduct(id)==0) {
 			return new ResponseEntity(id+"상품 아이디에 대한 상품이 없어 삭제 불가", HttpStatus.NOT_FOUND);
 		}		
 		return new ResponseEntity(id+" id 상품정보삭제완료", HttpStatus.OK);
@@ -56,7 +56,7 @@ public class ProductController {
 	@PutMapping("/products")
 	public ResponseEntity updateProduct(ProductVO productVO) {
 		System.out.println("Request Method : PUT "+productVO);
-		int result= productMapper.updateProduct(productVO);
+		int result= mapper.updateProduct(productVO);
 		if (result==0) {
 			return new ResponseEntity(productVO.getId()+"번 상품 아이디에 대한 상품이 없어 수정불가", HttpStatus.NOT_FOUND);
 		}
